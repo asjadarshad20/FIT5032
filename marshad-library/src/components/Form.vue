@@ -37,7 +37,13 @@ const clearForm = () => {
           <div class="row mb-3">
             <div class="col-12 col-sm-6">
               <label for="username" class="form-label">Username</label>
-              <input type="text" class="form-control" id="username" v-model="formData.username" />
+              <input
+                type="text"
+                class="form-control"
+                id="username"
+                required
+                v-model="formData.username"
+              />
             </div>
             <div class="col-12 col-sm-6">
               <label for="password" class="form-label">Password</label>
@@ -45,6 +51,8 @@ const clearForm = () => {
                 type="password"
                 class="form-control"
                 id="password"
+                minlength="4"
+                maxlength="5"
                 v-model="formData.password"
               />
             </div>
@@ -63,7 +71,7 @@ const clearForm = () => {
             </div>
             <div class="col-12 col-sm-6">
               <label for="gender" class="form-label">Gender</label>
-              <select class="form-select" id="gender" v-model="formData.gender">
+              <select class="form-select" id="gender" required v-model="formData.gender">
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
@@ -77,6 +85,9 @@ const clearForm = () => {
               id="reason"
               rows="3"
               v-model="formData.reason"
+              required
+              minlength="10"
+              maxlength="100"
             ></textarea>
           </div>
           <div class="text-center">
