@@ -7,10 +7,11 @@ import Image from 'primevue/image'
 const formData = ref({
   username: '',
   password: '',
+  confirmPassword: '',
   isAustralian: false,
-  confrimPassword: '',
   reason: '',
-  gender: ''
+  gender: '',
+  suburb: 'Clayton'
 })
 
 const submittedCards = ref([])
@@ -37,6 +38,7 @@ const clearForm = () => {
   formData.value = {
     username: '',
     password: '',
+    suburb: 'Clayton',
     confrimPassword: '',
     isAustralian: false,
     reason: '',
@@ -202,6 +204,10 @@ const validateConfirmPassword = (blur) => {
             <div v-if="errors.reason" class="text-danger">{{ errors.reason }}</div>
             <div v-if="valid.reason" class="text-valid">{{ valid.reason }}</div>
           </div>
+          <div class="mb-3">
+            <label for="reason" class="form-label">Suburb</label>
+            <input type="text" class="form-control" id="suburb" v-bind:value="formData.suburb" />
+          </div>
           <div class="text-center">
             <button type="submit" class="btn btn-primary me-2">Submit</button>
             <button type="button" class="btn btn-secondary" @click="clearForm">Clear</button>
@@ -218,6 +224,7 @@ const validateConfirmPassword = (blur) => {
             </Column>
             <Column field="gender" header="Gender"></Column>
             <Column field="reason" header="Reason"></Column>
+            <Column field="suburb" header="Suburb"></Column>
           </DataTable>
         </div>
       </div>
