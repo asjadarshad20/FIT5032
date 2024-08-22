@@ -2,11 +2,13 @@
 import { ref } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
+import Image from 'primevue/image'
 
 const formData = ref({
   username: '',
   password: '',
   isAustralian: false,
+  confrimPassword: '',
   reason: '',
   gender: ''
 })
@@ -18,6 +20,7 @@ const submitForm = () => {
   validatePassword(true)
   validateReason(true)
   validateGender(true)
+
   if (
     !errors.value.username &&
     !errors.value.password &&
@@ -34,12 +37,14 @@ const clearForm = () => {
   formData.value = {
     username: '',
     password: '',
+    confrimPassword: '',
     isAustralian: false,
     reason: '',
     gender: ''
   }
 }
 const errors = ref({ username: '', password: null, isAustralian: null, reason: null, gender: null })
+const valid = ref({ reason: null })
 
 const validateName = (blur) => {
   if (formData.value.username.length < 3) {
@@ -51,9 +56,16 @@ const validateName = (blur) => {
 
 const validateReason = (blur) => {
   if (formData.value.reason.length < 20 || formData.value.reason.length > 200) {
-    if (blur) errors.value.reason = 'Reasons must be between 10 and 200 characters'
+    if (blur) errors.value.reason = 'Reasons must be between 20 and 200 characters'
+    valid.value.reason = null
   } else {
     errors.value.reason = null
+
+    if (formData.value.reason.includes('friend')) {
+      if (blur) valid.value.reason = 'Great to have a friend'
+    } else {
+      valid.value.reason = null
+    }
   }
 }
 const validateGender = (blur) => {
@@ -85,13 +97,28 @@ const validatePassword = (blur) => {
     errors.value.password = null
   }
 }
+const validateConfirmPassword = (blur) => {
+  if (formData.value.password !== formData.value.confirmPassword) {
+    if (blur) errors.value.confirmPassword = 'Passwords do not match.'
+  } else {
+    errors.value.confirmPassword = null
+  }
+}
 </script>
 
 <template>
   <div class="container mt-5">
     <div class="row">
+      <div class="col-2 col-md-2"></div>
+
+      <div class="col-2 col-md-2 text-end">
+        <Image src="../../public/image.png"></Image>
+      </div>
+      <h1 class="col-8 col-md-8 text-left">W5. Library Registeration Form</h1>
       <div class="col-12 col-md-8 offset-md-2">
-        <h1 class="text-center">User Information Form</h1>
+        <div class="col-12">
+          <h6 class="text-center">Let's build more advanced features into our form.</h6>
+        </div>
         <form @submit.prevent="submitForm">
           <div class="row mb-3">
             <div class="col-12 col-sm-6">
@@ -105,31 +132,6 @@ const validatePassword = (blur) => {
                 @input="() => validateName(false)"
               />
               <div v-if="errors.username" class="text-danger">{{ errors.username }}</div>
-            </div>
-            <div class="col-12 col-sm-6">
-              <label for="password" class="form-label">Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="password"
-                v-model="formData.password"
-                @blur="() => validatePassword(true)"
-                @input="() => validatePassword(false)"
-              />
-              <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
-            </div>
-          </div>
-          <div class="row mb-3">
-            <div class="col-12 col-sm-6">
-              <div class="form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  id="isAustralian"
-                  v-model="formData.isAustralian"
-                />
-                <label class="form-check-label" for="isAustralian"> Australian Resident? </label>
-              </div>
             </div>
             <div class="col-12 col-sm-6">
               <label for="gender" class="form-label">Gender</label>
@@ -148,6 +150,44 @@ const validatePassword = (blur) => {
               </select>
               <div v-if="errors.gender" class="text-danger">{{ errors.gender }}</div>
             </div>
+            <div class="col-12 col-sm-6">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                v-model="formData.password"
+                @blur="() => validatePassword(true)"
+                @input="() => validatePassword(false)"
+              />
+              <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
+            </div>
+            <div class="col-12 col-sm-6">
+              <label for="password" class="form-label">Confirm Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="confirm-password"
+                v-model="formData.confirmPassword"
+                @blur="() => validateConfirmPassword(true)"
+              />
+              <div v-if="errors.confirmPassword" class="text-danger">
+                {{ errors.confirmPassword }}
+              </div>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-12 col-sm-6">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="isAustralian"
+                  v-model="formData.isAustralian"
+                />
+                <label class="form-check-label" for="isAustralian"> Australian Resident? </label>
+              </div>
+            </div>
           </div>
           <div class="mb-3">
             <label for="reason" class="form-label">Reason for joining</label>
@@ -160,6 +200,7 @@ const validatePassword = (blur) => {
               @input="() => validateReason(false)"
             ></textarea>
             <div v-if="errors.reason" class="text-danger">{{ errors.reason }}</div>
+            <div v-if="valid.reason" class="text-valid">{{ valid.reason }}</div>
           </div>
           <div class="text-center">
             <button type="submit" class="btn btn-primary me-2">Submit</button>
@@ -185,6 +226,9 @@ const validatePassword = (blur) => {
 </template>
 
 <style scoped>
+.text-valid {
+  color: green;
+}
 .card {
   border: 1px solid #ccc;
   border-radius: 10px;
