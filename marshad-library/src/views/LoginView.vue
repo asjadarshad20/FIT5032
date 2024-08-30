@@ -39,11 +39,8 @@ const submitForm = () => {
     }
     console.log(user)
 
-    // Commit the mutation to update authentication state
     store.commit('setAuthentication', true)
     store.commit('setUser', user)
-
-    // Redirect to the Home page
     handleLogin()
   }
 }

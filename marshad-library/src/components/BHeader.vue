@@ -37,13 +37,10 @@ export default {
     const store = useStore()
     const router = useRouter()
 
-    // Accessing Vuex state as a computed property
     const isAuthenticated = computed(() => store.state.isAuthenticated)
 
-    // Method to handle logout
     const logout = () => {
       store.commit('setAuthentication', false)
-      // Redirect to a different page after logout
       router.push({ path: '/' })
     }
 
