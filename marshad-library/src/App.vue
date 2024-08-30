@@ -1,13 +1,14 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import JSON from './components/JSON.vue'
-import Form from './components/Form.vue'
+import BHeader from './components/BHeader.vue'
 </script>
 
 <template>
+  <header>
+    <BHeader />
+  </header>
   <!-- <div>
     <JSON />
   </div> -->
-  <Form />
+  <router-view></router-view>
 </template>
