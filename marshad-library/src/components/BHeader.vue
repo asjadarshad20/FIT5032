@@ -22,32 +22,36 @@
         <li class="nav-item">
           <router-link to="/about" class="nav-link" active-class="active">About</router-link>
         </li>
+        <li class="nav-item">
+          <router-link to="/FireRegister" class="nav-link" active-class="active"
+            >Firebase Register</router-link
+          >
+        </li>
       </ul>
     </header>
   </div>
 </template>
 
-<script>
+<script setup>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { getAuth, signOut } from 'firebase/auth'
 
-export default {
-  setup() {
-    const store = useStore()
-    const router = useRouter()
+const store = useStore()
+const router = useRouter()
+const auth = getAuth()
 
-    const isAuthenticated = computed(() => store.state.isAuthenticated)
+const isAuthenticated = computed(() => store.state.isAuthenticated)
 
-    const logout = () => {
-      store.commit('setAuthentication', false)
-      router.push({ path: '/' })
-    }
-
-    return {
-      isAuthenticated,
-      logout
-    }
+const logout = async () => {
+  try {
+    await signOut(auth)
+    console.log('signed out successfully')
+    store.commit('setAuthentication', false)
+    router.push({ path: '/' })
+  } catch (error) {
+    console.error('Sign out error:', error)
   }
 }
 </script>

@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import LoginView from '../views/LoginView.vue'
 import store from '@/store'
-
+import FirebaseRegisterView from '@/views/FirebaseRegisterView.vue'
 const routes = [
   {
     path: '/',
@@ -19,7 +19,13 @@ const routes = [
     path: '/about',
     name: 'About',
     component: AboutView
+  },
+  {
+    path: '/FireRegister',
+    name: 'FireRegister',
+    component: FirebaseRegisterView
   }
+  
 ]
 
 const router = createRouter({
@@ -29,10 +35,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.name === 'About' && !store.state.isAuthenticated) {
-    // If the user is not authenticated and trying to access the About page, redirect to the login page
     next({ name: 'login' });
   } else {
-    // Allow navigation to other pages
     next();
   }
 });

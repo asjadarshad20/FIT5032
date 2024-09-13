@@ -1,13 +1,23 @@
 <script setup>
 import { ref } from 'vue'
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { useRouter } from 'vue-router'
 import store from '@/store'
 
+const auth = getAuth()
+
 const router = useRouter()
 const handleLogin = () => {
-  if (store.state.isAuthenticated) {
-    router.push({ path: '/about' })
-  }
+  signInWithEmailAndPassword(auth, formData.value.username, formData.value.password)
+    .then(() => {
+      store.commit('setAuthentication', true)
+      console.log('Firebase Sign in Successful!')
+      router.push('/about')
+      console.log(auth.currentUser)
+    })
+    .catch((error) => {
+      console.error(error.code)
+    })
 }
 const formData = ref({
   username: '',
@@ -19,30 +29,18 @@ const errors = ref({
   password: ''
 })
 
-const validateName = (blur) => {
-  if (formData.value.username !== 'Mohamed' || formData.value.password !== 'Asjad123@') {
-    if (blur) errors.value.username = 'Incorrect Username and/or Password'
-    errors.value.password = 'Incorrect Username and/or Password'
-  } else {
-    errors.value.username = null
-    errors.value.password = null
-  }
-}
+// const validateName = (blur) => {
+//   if (formData.value.username !== 'Mohamed' || formData.value.password !== 'Asjad123@') {
+//     if (blur) errors.value.username = 'Incorrect Username and/or Password'
+//     errors.value.password = 'Incorrect Username and/or Password'
+//   } else {
+//     errors.value.username = null
+//     errors.value.password = null
+//   }
+// }
 
 const submitForm = () => {
-  validateName(true)
-
-  if (!errors.value.username && !errors.value.password) {
-    const user = {
-      username: formData.value.username,
-      password: formData.value.password
-    }
-    console.log(user)
-
-    store.commit('setAuthentication', true)
-    store.commit('setUser', user)
-    handleLogin()
-  }
+  handleLogin()
 }
 </script>
 
@@ -55,7 +53,7 @@ const submitForm = () => {
         <form @submit.prevent="submitForm">
           <div class="row mb-3">
             <div class="col">
-              <label for="username" class="form-label">Username</label>
+              <label for="username" class="form-label">Email</label>
               <input
                 type="text"
                 class="form-control"
