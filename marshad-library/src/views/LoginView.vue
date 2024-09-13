@@ -3,14 +3,42 @@ import { ref } from 'vue'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { useRouter } from 'vue-router'
 import store from '@/store'
+import db from '../main.js'
+import { collection, query, where, getDocs } from 'firebase/firestore'
 
 const auth = getAuth()
+
+const fetchUsers = async (email) => {
+  try {
+    const q = query(collection(db, 'users'), where('email', '==', email))
+    const querySnapshot = await getDocs(q)
+
+    if (querySnapshot.empty) {
+      console.log('No user found with this email')
+      return
+    }
+
+    const userDoc = querySnapshot.docs[0]
+    const userData = userDoc.data()
+
+    console.log('User data:', userData)
+
+    if (userData.role) {
+      console.log('User roles:', userData.role)
+    } else {
+      console.log('No roles found for this user')
+    }
+  } catch (error) {
+    console.error('Error fetching user data:', error)
+  }
+}
 
 const router = useRouter()
 const handleLogin = () => {
   signInWithEmailAndPassword(auth, formData.value.username, formData.value.password)
     .then(() => {
       store.commit('setAuthentication', true)
+      fetchUsers(formData.value.username)
       console.log('Firebase Sign in Successful!')
       router.push('/about')
       console.log(auth.currentUser)

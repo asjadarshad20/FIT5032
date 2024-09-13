@@ -49,6 +49,7 @@ const logout = async () => {
     await signOut(auth)
     console.log('signed out successfully')
     store.commit('setAuthentication', false)
+    console.log(auth.currentUser)
     router.push({ path: '/' })
   } catch (error) {
     console.error('Sign out error:', error)
