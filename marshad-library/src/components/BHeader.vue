@@ -27,6 +27,12 @@
             >Firebase Register</router-link
           >
         </li>
+        <li class="nav-item">
+          <router-link to="/AddBook" class="nav-link" active-class="active">Add Book</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/BookList" class="nav-link" active-class="active">Books</router-link>
+        </li>
       </ul>
     </header>
   </div>
