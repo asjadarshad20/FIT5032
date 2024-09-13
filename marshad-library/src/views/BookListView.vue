@@ -7,9 +7,6 @@
     <button class="btn btn-primary ml-2" @click="filterBooks">Filter</button>
   </div>
 
-  <!-- Max ISBN Filter Section -->
-
-  <!-- Books Table -->
   <DataTable
     :value="books"
     editMode="cell"
@@ -72,14 +69,13 @@ import Column from 'primevue/column'
 
 const books = ref([])
 const editingRow = ref(null)
-const maxIsbn = ref(1000) // Ref value for max ISBN input
+const maxIsbn = ref(1000)
 
-// Fetch books with the specified filter
 const fetchBooks = async (isbnNum) => {
   try {
     const q = query(
       collection(db, 'books'),
-      where('isbn', '<', isbnNum), // Filter books by max ISBN
+      where('isbn', '<', isbnNum),
       orderBy('isbn'),
       limit(100)
     )
@@ -93,9 +89,8 @@ const fetchBooks = async (isbnNum) => {
   }
 }
 
-// Filter books based on max ISBN value
 const filterBooks = () => {
-  fetchBooks(Number(maxIsbn.value)) // Fetch with the new max ISBN value
+  fetchBooks(Number(maxIsbn.value))
 }
 
 const updateBook = async (book) => {
@@ -107,7 +102,7 @@ const updateBook = async (book) => {
     })
     alert('Book updated successfully!')
     editingRow.value = null
-    fetchBooks(maxIsbn.value) // Fetch again after updating
+    fetchBooks(maxIsbn.value)
   } catch (error) {
     console.error('Error updating book:', error)
   }
@@ -118,14 +113,14 @@ const deleteBook = async (bookId) => {
     const bookRef = doc(db, 'books', bookId)
     await deleteDoc(bookRef)
     alert('Book deleted successfully!')
-    fetchBooks(maxIsbn.value) // Fetch again after deleting
+    fetchBooks(maxIsbn.value)
   } catch (error) {
     console.error('Error deleting book:', error)
   }
 }
 
 onMounted(() => {
-  fetchBooks(Number(maxIsbn.value)) // Fetch books initially
+  fetchBooks(Number(maxIsbn.value))
 })
 </script>
 
