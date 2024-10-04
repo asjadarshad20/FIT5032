@@ -6,6 +6,7 @@ import store from '@/store'
 import FirebaseRegisterView from '@/views/FirebaseRegisterView.vue';
 import AddBookView from '@/views/AddBookView.vue'
 import BookListView from '@/views/BookListView.vue'
+import GetBookCountView from '@/views/GetBookCountView.vue'
 
 const routes = [
   {
@@ -37,6 +38,11 @@ const routes = [
     path: '/BookList',
     name: 'BookList',
     component: BookListView
+  },
+  {
+    path: '/BookCount',
+    name: 'BookCount',
+    component: GetBookCountView
   }
   
 ]
