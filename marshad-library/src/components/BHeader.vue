@@ -48,6 +48,11 @@
             >Weather
           </router-link>
         </li>
+        <li class="nav-item">
+          <router-link to="/GetBooks" class="nav-link" active-class="active"
+            >Get Book API</router-link
+          >
+        </li>
       </ul>
     </header>
   </div>

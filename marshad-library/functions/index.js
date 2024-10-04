@@ -59,7 +59,26 @@ exports.addBook = onRequest((req, res) => {
       }
     });
   });
-
+  exports.listBooks = onRequest((req, res) => {
+    cors(req, res, async () => {
+      try {
+        const booksCollection = admin.firestore().collection("books");
+        const snapshot = await booksCollection.get();
+  
+        if (snapshot.empty) {
+          return res.status(404).send({ message: "No books found" });
+        }
+  
+        const books = snapshot.docs.map(doc => doc.data());
+  
+        res.status(200).json(books);
+      } catch (error) {
+        console.error("Error listing books:", error.message);
+        res.status(500).send("Error listing books");
+      }
+    });
+  });
+  
 
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
