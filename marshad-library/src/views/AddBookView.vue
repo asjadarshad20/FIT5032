@@ -1,8 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import db from '../firebase.js'
-import { collection, addDoc } from 'firebase/firestore'
+import axios from 'axios'
 
 const formData = ref({
   isbn: '',
@@ -17,17 +15,21 @@ const addBook = async () => {
       return
     }
 
-    await addDoc(collection(db, 'books'), {
+    const response = await axios.post('https://addbook-fl7562lhkq-uc.a.run.app', {
       isbn: isbnNum,
       name: formData.value.name
     })
 
-    formData.value.name = ''
-    formData.value.isbn = ''
-
-    alert('Book added successfully!')
+    if (response.status === 200) {
+      alert(response.data)
+      formData.value.name = ''
+      formData.value.isbn = ''
+    } else {
+      alert('Failed to add the book: ' + response.data)
+    }
   } catch (error) {
     console.error('Error adding book:', error)
+    alert('An error occurred while adding the book.')
   }
 }
 
@@ -58,7 +60,7 @@ const submitForm = () => {
             <div class="col">
               <label for="name" class="form-label">Name</label>
               <input required type="text" class="form-control" id="name" v-model="formData.name" />
-              <div vnif="errors.name" class="text-danger">{{ errors.Name }}</div>
+              <div v-if="errors.name" class="text-danger">{{ errors.name }}</div>
             </div>
           </div>
           <div class="text-center mt-2">
