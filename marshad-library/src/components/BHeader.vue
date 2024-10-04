@@ -38,6 +38,16 @@
             >Book Count</router-link
           >
         </li>
+        <li class="nav-item">
+          <router-link to="/CountBook" class="nav-link" active-class="active"
+            >Book Count API</router-link
+          >
+        </li>
+        <li class="nav-item">
+          <router-link to="/WeatherView" class="nav-link" active-class="active"
+            >Weather
+          </router-link>
+        </li>
       </ul>
     </header>
   </div>
